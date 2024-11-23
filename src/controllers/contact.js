@@ -16,7 +16,6 @@ exports.updateContact = async (req, res) => {
   };
 
   const results = await contactModel.updateContact(updateData);
-  console.log(results);
   if (results.affectedRows === 0) {
     return response(res, 404, false, "Contact Data not Found ID Wrong!");
   }
