@@ -31,6 +31,6 @@ exports.updateContact = async (req, res) => {
     res,
     200,
     true,
-    `Contact Data with ID (${id}) Updated Successfully !!`
+    `Contact Data with ID (${id}) Successfully Updated !!`
   );
 };

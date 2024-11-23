@@ -8,5 +8,7 @@ const bannerController = require("../controllers/banner");
 route.post("/", upload.single("image"), bannerController.createBanner);
 route.get("/", bannerController.getBanner);
 route.get("/:id", bannerController.getBannerByID);
+route.patch("/:id", upload.single("image"), bannerController.updateBanner);
+route.delete("/:id", bannerController.deleteBanner);
 
 module.exports = route;
