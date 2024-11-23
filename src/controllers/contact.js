@@ -14,7 +14,15 @@ exports.updateContact = async (req, res) => {
     id,
     ...Formdata,
   };
-
+  const key = Object.keys(Formdata);
+  if (key <= 0) {
+    return response(
+      res,
+      400,
+      false,
+      "Request denied at least update 1 column!"
+    );
+  }
   const results = await contactModel.updateContact(updateData);
   if (results.affectedRows === 0) {
     return response(res, 404, false, "Contact Data not Found ID Wrong!");

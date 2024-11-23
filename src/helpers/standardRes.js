@@ -10,7 +10,7 @@ exports.response = (
     success,
     message,
     pageInfo,
-    results: "",
+    results: {},
   };
   if (status >= 400) {
     returnData.success = false;
