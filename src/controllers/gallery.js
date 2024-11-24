@@ -15,8 +15,24 @@ exports.createGallery = async (req, res) => {
 };
 
 exports.getGallery = async (req, res) => {
-  const results = await galleryModel.getGallery();
-  return response(res, 200, true, "List all Gallery", results);
+  const query = req.query;
+  let limit = parseInt(query.limit) || 3;
+  let offset = parseInt(query.limit) || 0;
+  let page = parseInt(query.page) || 1;
+  offset = page * limit - limit;
+  const pageInfo = {};
+
+  const totalData = await galleryModel.countGallery();
+  const totalPage = Math.ceil(totalData[0].count / limit);
+  pageInfo.totalData = totalData[0].count;
+  pageInfo.currentPage = page;
+  pageInfo.totalPage = totalPage;
+  pageInfo.limit = limit;
+  pageInfo.nextPage = page < totalPage ? page + 1 : null;
+  pageInfo.prevPage = page > 1 ? page - 1 : null;
+
+  const results = await galleryModel.getGallery(limit, offset);
+  return response(res, 200, true, "List of Gallery", results, pageInfo);
 };
 
 exports.getGalleryByID = async (req, res) => {

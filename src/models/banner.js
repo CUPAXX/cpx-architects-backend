@@ -9,8 +9,10 @@ exports.createBanner = (data) => {
   );
 };
 
-exports.getBanner = () => {
-  return execPromise("SELECT * FROM banner");
+exports.getBanner = (limit, offset) => {
+  let query = 'SELECT * FROM banner'
+  if(limi)
+  return execPromise("");
 };
 
 exports.getBannerByID = (id) => {

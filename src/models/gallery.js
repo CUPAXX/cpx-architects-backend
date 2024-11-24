@@ -9,8 +9,8 @@ exports.createGallery = (data) => {
   );
 };
 
-exports.getGallery = () => {
-  return execPromise("SELECT * FROM gallery");
+exports.getGallery = (limit, offset) => {
+  return execPromise(`SELECT * FROM gallery LIMIT ${limit} OFFSET ${offset}`);
 };
 
 exports.getGalleryByID = (id) => {
@@ -26,4 +26,8 @@ exports.updateGallery = (data) => {
 
 exports.deleteGallery = (id) => {
   return execPromise(`DELETE FROM gallery WHERE id=${id}`);
+};
+
+exports.countGallery = () => {
+  return execPromise("SELECT COUNT(id) as count FROM gallery");
 };
