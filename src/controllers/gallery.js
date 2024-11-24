@@ -1,6 +1,7 @@
 const galleryModel = require("../models/gallery");
 const { response } = require("../helpers/standardRes");
 const { removeOldFile } = require("../utils/removeOldFile");
+const { pageInfo } = require("../utils/pageInfo");
 
 exports.createGallery = async (req, res) => {
   const file = req.file;
@@ -16,23 +17,14 @@ exports.createGallery = async (req, res) => {
 
 exports.getGallery = async (req, res) => {
   const query = req.query;
-  let limit = parseInt(query.limit) || 3;
-  let offset = parseInt(query.limit) || 0;
-  let page = parseInt(query.page) || 1;
-  offset = page * limit - limit;
-  const pageInfo = {};
-
   const totalData = await galleryModel.countGallery();
-  const totalPage = Math.ceil(totalData[0].count / limit);
-  pageInfo.totalData = totalData[0].count;
-  pageInfo.currentPage = page;
-  pageInfo.totalPage = totalPage;
-  pageInfo.limit = limit;
-  pageInfo.nextPage = page < totalPage ? page + 1 : null;
-  pageInfo.prevPage = page > 1 ? page - 1 : null;
-
-  const results = await galleryModel.getGallery(limit, offset);
-  return response(res, 200, true, "List of Gallery", results, pageInfo);
+  const getPageInfo = pageInfo(query, totalData);
+  console.log(getPageInfo);
+  const results = await galleryModel.getGallery(
+    getPageInfo.limit,
+    getPageInfo.offset
+  );
+  return response(res, 200, true, "List of Gallery", results, getPageInfo);
 };
 
 exports.getGalleryByID = async (req, res) => {
