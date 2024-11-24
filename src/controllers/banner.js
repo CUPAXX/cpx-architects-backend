@@ -23,6 +23,9 @@ exports.getBanner = async (req, res) => {
 exports.getBannerByID = async (req, res) => {
   const { id } = req.params;
   const results = await bannerModel.getBannerByID(id);
+  if (results.length <= 0) {
+    return response(res, 404, false, `Banner with ID (${id}) not Found!`);
+  }
   return response(res, 200, true, "Detail banner", results[0]);
 };
 

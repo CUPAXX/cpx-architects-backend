@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const path = require("path");
+const rootRouter = require("./src/routes");
 const { response } = require("./src/helpers/standardRes");
 
 require("dotenv").config();
@@ -27,8 +27,4 @@ server.listen(PORT || 8000, () => {
   console.log(`Backend running on port ${PORT || 8000}`);
 });
 
-const contactRoute = require("./src/routes/contact");
-app.use("/contact", contactRoute);
-
-const bannerRoute = require("./src/routes/banner");
-app.use("/banner", bannerRoute);
+app.use("/", rootRouter);
