@@ -19,7 +19,7 @@ exports.getGallery = async (req, res) => {
   const query = req.query;
   const totalData = await galleryModel.countGallery();
   const getPageInfo = pageInfo(query, totalData);
-  console.log(getPageInfo);
+
   const results = await galleryModel.getGallery(
     getPageInfo.limit,
     getPageInfo.offset

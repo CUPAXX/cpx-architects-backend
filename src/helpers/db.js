@@ -9,6 +9,12 @@ const connection = mysql.createConnection({
   connectTimeout: 90000,
 });
 connection.connect(function (err) {
-  if (err) throw err;
+  if (err) {
+    if (err.code === "ECONNREFUSED") {
+      throw "Connection to Database Error!!!";
+    } else {
+      throw err.message;
+    }
+  }
 });
 module.exports = connection;
