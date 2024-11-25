@@ -104,15 +104,21 @@ exports.updateProject = async (req, res) => {
 exports.deleteProject = async (req, res) => {
   const { id } = req.params;
   const getProject = await projectModel.getProjectByID(id);
-  if (getProject.length > 0) {
-    removeOldFile(`${getProject[0].image}`);
-  } else {
+  if (getProject.length <= 0) {
     return response(
       res,
       404,
       false,
       `Request Failed Project with ID (${id}) not found`
     );
+  }
+
+  removeOldFile(`${getProject[0].image}`);
+  if (getProject[0].image2) {
+    removeOldFile(`${getProject[0].image2}`);
+  }
+  if (getProject[0].image3) {
+    removeOldFile(`${getProject[0].image3}`);
   }
   const results = await projectModel.deleteProject(id);
   if (results.affectedRows > 0) {

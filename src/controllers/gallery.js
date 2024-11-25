@@ -83,9 +83,7 @@ exports.updateGallery = async (req, res) => {
 exports.deleteGallery = async (req, res) => {
   const { id } = req.params;
   const getGallery = await galleryModel.getGalleryByID(id);
-  if (getGallery.length > 0) {
-    removeOldFile(`${getGallery[0].image}`);
-  } else {
+  if (getGallery.length <= 0) {
     return response(
       res,
       404,
@@ -93,6 +91,8 @@ exports.deleteGallery = async (req, res) => {
       `Request Failed Gallery with ID (${id}) not found`
     );
   }
+
+  removeOldFile(`${getGallery[0].image}`);
   const results = await galleryModel.deleteGallery(id);
   if (results.affectedRows > 0) {
     return response(
