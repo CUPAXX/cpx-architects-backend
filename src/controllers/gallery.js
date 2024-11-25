@@ -49,6 +49,14 @@ exports.updateGallery = async (req, res) => {
       label: file.filename,
     });
     const results = await galleryModel.getGalleryByID(id);
+    if (results.length <= 0) {
+      return response(
+        res,
+        404,
+        false,
+        `Request Failed Project with ID (${id}) not found`
+      );
+    }
     removeOldFile(`${results[0].image}`);
   }
 

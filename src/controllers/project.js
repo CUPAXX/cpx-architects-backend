@@ -52,33 +52,36 @@ exports.updateProject = async (req, res) => {
   const file = req.files;
   const body = req.body;
 
+  const fileKey = Object.keys(file);
+
   const updateData = {
     id,
     ...body,
-    // image: `${process.env.APP_UPLOAD_PATH}/${file.image[0].filename}`,
-    // label: file.image[0].filename,
-    // image2: file.image2
-    //   ? `${process.env.APP_UPLOAD_PATH}/${file.image2[0].filename}`
-    //   : "",
-    // label2: file.image2 ? file.image2[0].filename : "",
-    // image3: file.image3
-    //   ? `${process.env.APP_UPLOAD_PATH}/${file.image3[0].filename}`
-    //   : "",
-    // label3: file.image3 ? file.image3[0].filename : "",
   };
-  console.log(file);
 
-  if (obj && obj !== "null" && obj !== "undefined") {
-    // Object.assign(updateData, {
-    //   image: `${process.env.APP_UPLOAD_PATH}/${file.filename}`,
-    //   label: file.filename,
-    // });
-    // const results = await projectModel.getProjectByID(id);
-    // removeOldFile(`${results[0].image}`);
+  if (fileKey.length > 0) {
+    const results = await projectModel.getProjectByID(id);
+    if (results.length <= 0) {
+      return response(
+        res,
+        404,
+        false,
+        `Request Failed Project with ID (${id}) not found`
+      );
+    }
+    for (let i = 0; i < fileKey.length; i++) {
+      let val = fileKey[i];
+      let labelCond = i > 0 ? i + 1 : "";
+      updateData[
+        val
+      ] = `${process.env.APP_UPLOAD_PATH}/${file[val][0].filename}`;
+      updateData[`imageLabel${labelCond}`] = file[val][0].filename;
+      removeOldFile(`${results[0][val]}`);
+    }
   }
 
-  const key = Object.keys(updateData);
-  if (key.length <= 1) {
+  const updateDataKey = Object.keys(updateData);
+  if (updateDataKey.length <= 1) {
     return response(
       res,
       400,
@@ -86,15 +89,16 @@ exports.updateProject = async (req, res) => {
       "Request denied at least update 1 column!"
     );
   }
-  // const results = await projectModel.updateProject(updateData);
-  // if (results.affectedRows > 0) {
-  return response(
-    res,
-    200,
-    true,
-    `Project Data with ID (${id}) Successfully Updated !!`
-  );
-  // }
+
+  const results = await projectModel.updateProject(updateData);
+  if (results.affectedRows > 0) {
+    return response(
+      res,
+      200,
+      true,
+      `Project Data with ID (${id}) Successfully Updated !!`
+    );
+  }
 };
 
 exports.deleteProject = async (req, res) => {
