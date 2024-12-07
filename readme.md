@@ -44,7 +44,7 @@ this application is made using Express Js v4 and mysql for database
 
 Open .env file on your favorite code editor, and copy paste this code below :
 
-```
+```js
 NODE_ENV = development
 PORT = 8000
 APP_URL=http://localhost:8000
